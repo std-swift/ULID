@@ -1,0 +1,49 @@
+language: minimal
+dist: xenial
+
+env:
+  global:
+    - REPO=stdswift/build
+  matrix:
+    - SWIFT=5.0   OS=trusty
+    - SWIFT=5.0   OS=xenial
+    - SWIFT=5.0   OS=bionic
+
+matrix:
+  include:
+    - os: osx
+      env:
+      osx_image: xcode10.2
+
+install:
+  - |
+    set -e
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
+      docker pull $REPO:$OS-$SWIFT
+    fi
+
+script:
+  - |
+    set -e
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+    then
+      docker run --volume `pwd`:/code --workdir /code $REPO:$OS-$SWIFT swift test
+    fi
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+    then
+      swift test --generate-linuxmain && git diff --exit-code
+      swift test --enable-code-coverage
+    fi
+
+after_success:
+  - |
+    set -e
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+    then
+      profile=.build/debug/codecov/default.profdata
+      executable=.build/debug/${PWD##*/}PackageTests.xctest/Contents/MacOS/${PWD##*/}PackageTests
+      coverage=.build/debug/codecov/${PWD##*/}.coverage.txt
+      xcrun llvm-cov show -instr-profile $profile $executable > $coverage
+      bash <(curl -s https://codecov.io/bash) -f $coverage
+    fi
