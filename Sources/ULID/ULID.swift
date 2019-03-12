@@ -137,8 +137,8 @@ extension ULID: LosslessStringConvertible {
 	public init?(_ description: String) {
 		guard description.count == 26 else { return nil }
 		var decoder = Base32Decoder()
-		decoder.decodePartial("000000") // Add alignment bytes
-		decoder.decodePartial(description)
+		decoder.decode("000000") // Add alignment bytes
+		decoder.decode(description)
 		let bytes = decoder.finalize()
 		
 		// Ensure the time component is only 48 bits (these are alignment bytes)
@@ -157,12 +157,12 @@ extension ULID: LosslessStringConvertible {
 	
 	public var description: String {
 		var encoder = Base32Encoder()
-		encoder.encodePartial([0,0,0,0]) // Align self.time to end on a boundary
-		encoder.encodePartial(self.rawTime.high.bigEndianBytes)
-		encoder.encodePartial(self.rawTime.low.bigEndianBytes)
-		encoder.encodePartial(self.random.0.bigEndianBytes)
-		encoder.encodePartial(self.random.1.bigEndianBytes)
-		encoder.encodePartial(self.random.2.bigEndianBytes)
+		encoder.encode([0,0,0,0]) // Align self.time to end on a boundary
+		encoder.encode(self.rawTime.high.bigEndianBytes)
+		encoder.encode(self.rawTime.low.bigEndianBytes)
+		encoder.encode(self.random.0.bigEndianBytes)
+		encoder.encode(self.random.1.bigEndianBytes)
+		encoder.encode(self.random.2.bigEndianBytes)
 		return String(encoder.finalize().dropFirst(6)) // Remove alignment bytes
 	}
 }

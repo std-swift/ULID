@@ -18,7 +18,7 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://github.com/std-swift/Base32.git",
-		         from: "1.0.0"),
+		         from: "2.0.0"),
 		.package(url: "https://github.com/std-swift/Time.git",
 		         from: "1.0.0"),
 	],
