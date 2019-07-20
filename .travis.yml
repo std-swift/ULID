@@ -11,6 +11,9 @@ env:
     - SWIFT=5.0.1 OS=trusty
     - SWIFT=5.0.1 OS=xenial
     - SWIFT=5.0.1 OS=bionic
+    - SWIFT=5.0.2 OS=trusty
+    - SWIFT=5.0.2 OS=xenial
+    - SWIFT=5.0.2 OS=bionic
 
 matrix:
   include:
