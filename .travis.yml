@@ -20,6 +20,9 @@ matrix:
     - os: osx
       env:
       osx_image: xcode10.2
+    - os: osx
+      env:
+      osx_image: xcode11
 
 install:
   - |
