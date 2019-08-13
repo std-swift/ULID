@@ -142,16 +142,16 @@ extension ULID: LosslessStringConvertible {
 		let bytes = decoder.finalize()
 		
 		// Ensure the time component is only 48 bits (these are alignment bytes)
-		guard bytes.prefix(4).allSatisfy({ $0 == 0 }) else { return nil }
+		guard bytes[..<4].allSatisfy({ $0 == 0 }) else { return nil }
 		
 		self.rawTime = (
-			Array(bytes.dropFirst(4).prefix(4)).asBigEndian().first!,
-			Array(bytes.dropFirst(8).prefix(2)).asBigEndian().first!
+			Array(bytes[4..<8]).asBigEndian().first!,
+			Array(bytes[8..<10]).asBigEndian().first!
 		)
 		self.random = (
-			Array(bytes.dropFirst(10).prefix(2)).asBigEndian().first!,
-			Array(bytes.dropFirst(12).prefix(4)).asBigEndian().first!,
-			Array(bytes.dropFirst(16).prefix(4)).asBigEndian().first!
+			Array(bytes[10..<12]).asBigEndian().first!,
+			Array(bytes[12..<16]).asBigEndian().first!,
+			Array(bytes[16..<20]).asBigEndian().first!
 		)
 	}
 	
