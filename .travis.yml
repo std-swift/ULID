@@ -25,12 +25,6 @@ matrix:
   include:
     - os: osx
       env:
-      osx_image: xcode10
-    - os: osx
-      env:
-      osx_image: xcode10.1
-    - os: osx
-      env:
       osx_image: xcode10.2
     - os: osx
       env:
